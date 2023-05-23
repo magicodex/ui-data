@@ -1,0 +1,34 @@
+{
+  "name": "ui-data",
+  "version": "1.0.0",
+  "description": "获取/设置 UI 绑定的数据",
+  "license": "MIT",
+  "author": "mh.z",
+  "keywords": [
+    "html",
+    "dom",
+    "ui",
+    "data"
+  ],
+  "main": "dist/ui-data.js",
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "scripts": {
+    "build": "grunt",
+    "test": "grunt && start ./test/index.html"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^1.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magicodex/ui-data.git"
+  },
+  "bugs": {
+    "url": "https://github.com/magicodex/ui-data/issues"
+  },
+  "homepage": "https://github.com/magicodex/ui-data#readme"
+}

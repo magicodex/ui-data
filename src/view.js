@@ -1,0 +1,371 @@
+
+
+import { utils } from './utils';
+import { checkboxBooleanHandler } from './handler/checkbox-boolean-handler';
+import { defaultComponentHandler } from './handler/default-component-handler';
+
+"use strict";
+
+/** SOURCE-CODE-START */
+
+/**
+ * @class
+ * @param {(Document|Element)} baseElement
+ * @param {object} [opts]
+ */
+function View(baseElement, opts) {
+  opts = (opts || {});
+
+  this._baseElement = baseElement;
+  this._componentHandlers = (opts.componentHandlers || {});
+  this._nameAttributeName = (opts.nameAttributeName || 'data-x-name');
+  this._typeAttributeName = (opts.typeAttributeName || 'data-x-type');
+
+  this._initComponentHandlers = {
+    'default': defaultComponentHandler,
+    'checkbox-boolean': checkboxBooleanHandler
+  };
+}
+
+
+/**
+ * @description 执行初始化逻辑
+ */
+View.prototype.viewDidInit = function () {
+  this.doViewLifecycle('initEvents');
+};
+
+/**
+ * @description 执行销毁前逻辑
+ */
+View.prototype.viewWillDestroy = function () {
+  this.doViewLifecycle('removeEvents');
+};
+
+/**
+ * @description 获取指定表达式对应元素的数据
+ * @param {(string|string[])} expression 表达式
+ * @param {boolean} [skipNull] 是否跳过 null 值
+ * @returns {*} 值
+ */
+View.prototype.getData = function (expression, skipNull) {
+  // 表达式只能是字符串或数组
+  if ((typeof expression !== 'string') && !(expression instanceof Array)) {
+    throw new Error('argument#0 "expression" required string or Array');
+  }
+
+  skipNull = (skipNull || false);
+  // 转换表达式成选择器
+  var selector = this.convertExpressionToSelector(expression);
+  // 查找指定选择器对应的元素
+  var elements = this.queryElementsBySelector(selector);
+  // 转换成数据名称和元素的映射
+  var elementArrays = this.groupElementsByName(elements);
+
+  // 若表达式是数组或者"*"结尾的字符串，则是获取多个元素的值
+  if ((expression instanceof Array)
+    || (expression.charAt(expression.length - 1) === '*')) {
+    var elementValues = {};
+
+    for (var dataName in elementArrays) {
+      if (dataName === '') {
+        continue;
+      }
+
+      var elementArray = elementArrays[dataName];
+      // 获取元素的值
+      var dataValue = this.doGetDataValue(elementArray, skipNull);
+
+      if (!utils.isNullOrUndefined(dataValue) || !skipNull) {
+        elementValues[dataName] = dataValue;
+      }
+    }
+
+    return elementValues;
+  } else {
+    if (elements.length <= 0) {
+      return null;
+    }
+
+    for (var dataName in elementArrays) {
+      if (dataName === '') {
+        continue;
+      }
+
+      var elementArray = elementArrays[dataName];
+      // 获取元素的值
+      return this.doGetDataValue(elementArray, skipNull);
+    }
+  }
+};
+
+/**
+ * @description 设置指定表达式对应元素的数据
+ * @param {string|string[]} expression 表达式
+ * @param {*} value 值
+ * @param {boolean} [defaultNull] 是否默认 null 值
+ */
+View.prototype.setData = function (expression, value, defaultNull) {
+  // 表达式只能是字符串或数组
+  if ((typeof expression !== 'string') && !(expression instanceof Array)) {
+    throw new Error('argument#0 "expression" required string or Array');
+  }
+
+  defaultNull = (defaultNull || false);
+  // 转换表达式成选择器
+  var selector = this.convertExpressionToSelector(expression);
+  // 查找指定选择器对应的元素
+  var elements = this.queryElementsBySelector(selector);
+  // 转换成数据名称和元素的映射
+  var elementArrays = this.groupElementsByName(elements);
+
+  // 若表达式是数组或者"*"结尾的字符串，则是设置多个元素的值
+  if ((expression instanceof Array)
+    || (expression.charAt(expression.length - 1) === '*')) {
+    value = (value || {});
+
+    for (var dataName in elementArrays) {
+      var elementArray = elementArrays[dataName];
+      var dataValue = value[dataName];
+
+      if (!utils.isNullOrUndefined(dataValue) || defaultNull) {
+        // 设置元素的值
+        this.doSetDataValue(elementArray, dataValue, defaultNull);
+      }
+    }
+  } else {
+    if (elements.length <= 0) {
+      return;
+    }
+
+    for (var dataName in elementArrays) {
+      var elementArray = elementArrays[dataName];
+
+      // 设置元素的值
+      this.doSetDataValue(elementArray, value, defaultNull);
+    }
+  }
+};
+
+/**
+ * @description 获取元素的值
+ * @param {Element[]} elements DOM元素
+ * @param {boolean} [skipNull] 是否跳过 null 值
+ * @returns {*} 值
+ */
+View.prototype.doGetDataValue = function (elements, skipNull) {
+  if (!(elements instanceof Array)) {
+    throw new Error('argument#0 "elements required Array');
+  }
+
+  if (elements.length <= 0) {
+    throw new Error('argument#0 "elements is empty');
+  }
+
+  // 获取组件处理器
+  var handler = this.getComponentHandlerByElement(elements[0]);
+  // 获取元素的值
+  return handler.getValue(elements, (skipNull || false));
+};
+
+/**
+ * @description 设置元素的值
+ * @param {Element[]} elements DOM元素
+ * @param {*} value 值
+ * @param {boolean} [defaultNull] 是否默认 null 值
+ */
+View.prototype.doSetDataValue = function (elements, value, defaultNull) {
+  if (!(elements instanceof Array)) {
+    throw new Error('argument#0 "elements required Array');
+  }
+
+  if (elements.length <= 0) {
+    throw new Error('argument#0 "elements is empty');
+  }
+
+  // 获取组件处理器
+  var handler = this.getComponentHandlerByElement(elements[0]);
+  // 设置元素的值
+  handler.setValue(elements, value, (defaultNull || false));
+};
+
+/**
+ * @description 获取组件处理器
+ * @param {Element} element DOM元素 
+ * @returns {Object} 组件处理器
+ */
+View.prototype.getComponentHandlerByElement = function (element) {
+  if (utils.isNullOrUndefined(element)) {
+    throw new Error('argument#0 "element is null/undefined');
+  }
+
+  var handler;
+  var handlerName = element.getAttribute(this._typeAttributeName);
+
+  // 先获取自定义的组件处理器
+  if (!utils.isNullOrUndefined(handlerName)) {
+    handler = (this._componentHandlers[handlerName]
+      || this._initComponentHandlers[handlerName]);
+
+    if (utils.isNullOrUndefined(handler)) {
+      throw new Error('not found handler "' + handlerName + '"');
+    }
+
+    return handler;
+  }
+
+  // 如果没有自定义的处理器，则获取标签对应的处理器
+  var tagName = element.tagName.toLowerCase();
+  handlerName = '@' + tagName;
+  handler = (this._componentHandlers[handlerName]
+    || this._initComponentHandlers[handlerName]);
+
+  // 如果没有找到自定义的处理器和标签对应的处理器，则取默认处理器
+  if (utils.isNullOrUndefined(handler)) {
+    handler = (this._componentHandlers['default']
+      || this._initComponentHandlers['default']);
+  }
+
+  return handler;
+};
+
+/**
+ * @description 查找指定选择器对应的元素
+ * @param {(string|string[])} selector 选择器
+ * @returns {(Element[])} DOM元素
+ */
+View.prototype.queryElementsBySelector = function (selector) {
+  // 表达式只能是字符串或数组
+  if ((typeof selector !== 'string') && !(selector instanceof Array)) {
+    throw new Error('argument#0 "selector" required string or Array');
+  }
+
+  var selectorStr;
+
+  if (selector instanceof Array) {
+    selectorStr = selector.join(',');
+  } else {
+    selectorStr = selector;
+  }
+
+  return this._baseElement.querySelectorAll(selectorStr);
+};
+
+/**
+ * @description 转换表达式成选择器
+ * @param {(string|string[])} expression 表达式
+ * @returns {string[]} 选择器数组
+ */
+View.prototype.convertExpressionToSelector = function (expression) {
+  // 表达式只能是字符串或数组
+  if ((typeof expression !== 'string') && !(expression instanceof Array)) {
+    throw new Error('argument#0 "expression" required string or Array');
+  }
+
+  var selectorArray = [];
+  var expressionArray;
+
+  if (expression instanceof Array) {
+    expressionArray = expression;
+  } else {
+    expressionArray = [expression];
+  }
+
+  for (var index = 0; index < expressionArray.length; index++) {
+    var expressionStr = expressionArray[index];
+
+    if (expressionStr !== '') {
+      var selectorStr;
+
+      if (expressionStr === '*') {
+        // 表达式是"*"的情况，则匹配所有的元素
+        selectorStr = '[' + this._nameAttributeName + ']';
+      } else if (expressionStr.charAt(expressionStr.length - 1) === '*') {
+        // 表达式是"*"结尾的情况，则匹配指定前缀数据名称的元素
+        var prefixStr = expressionStr.slice(0, -1);
+        selectorStr = '[' + this._nameAttributeName + '^="' + prefixStr + '"]';
+      } else {
+        // 匹配指定数据名称的元素
+        selectorStr = '[' + this._nameAttributeName + '="' + expressionStr + '"]';
+      }
+
+      selectorArray.push(selectorStr);
+    }
+  }
+
+  return selectorArray;
+};
+
+/**
+ * @description 转换成数据名称和元素的映射
+ * @param {Object} elements DOM元素
+ * @returns {Object} 结果
+ */
+View.prototype.groupElementsByName = function (elements) {
+  if (utils.isNullOrUndefined(elements)) {
+    throw new Error('argument#0 "elements is null/undefined');
+  }
+
+  var elementArrays = {};
+
+  for (var index = 0; index < elements.length; index++) {
+    var element = elements[index];
+    var dataName = element.getAttribute(this._nameAttributeName);
+    dataName = (dataName || '');
+    var elementArray = elementArrays[dataName];
+
+    if (utils.isNullOrUndefined(elementArray)) {
+      elementArray = [];
+      elementArrays[dataName] = elementArray;
+    }
+
+    elementArray.push(element);
+  }
+
+  return elementArrays;
+};
+
+/**
+ * @description 执行生命周期逻辑
+ * @param {string} handlerMethodName 
+ */
+View.prototype.doViewLifecycle = function (handlerMethodName) {
+  var selectorStr = '[' + this.typeAttributeName + ']';
+  var elements = this.queryElementsBySelector(selectorStr);
+
+  if (elements.length <= 0) {
+    return;
+  }
+
+  // 查找指定选择器对应的元素
+  var elements = this.queryElementsBySelector(selector);
+  // 转换成数据名称和元素的映射
+  var elementArrays = this.groupElementsByName(elements);
+
+  for (var dataName in elementArrays) {
+    var elementArray = elementArrays[dataName];
+
+    if (dataName === '') {
+      for (var index = 0; index < elementArray.length; index++) {
+        var element = elements[index];
+        // 获取组件处理器
+        var handler = this.getComponentHandlerByElement(element);
+
+        if (handlerMethodName in handler) {
+          handler[handlerMethodName]([element]);
+        }
+      }
+    } else {
+      // 获取组件处理器
+      var handler = this.getComponentHandlerByElement(elements[0]);
+
+      if (handlerMethodName in handler) {
+        handler[handlerMethodName](elementArray);
+      }
+    }
+  }
+};
+
+/** SOURCE-CODE-END */
+
+export { View };
