@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>使用示例</title>
+  <link rel="stylesheet" type="text/css" href="example.css">
+</head>
+
+<body>
+  <!-- 表单面板  -->
+  <div id="formPanel" class="panel">
+    <div class="panel-title">表单</div>
+    <table width="100%">
+      <!-- 姓名 -->
+      <tr>
+        <td>user.name:</td>
+        <td><input data-name="user.name" type="text" /></td>
+      </tr>
+      <!-- 年龄 -->
+      <tr>
+        <td>user.age:</td>
+        <td><input data-name="user.age" type="text" /></td>
+      </tr>
+      <!-- 性别 -->
+      <tr>
+        <td>user.sex:</td>
+        <td>
+          <select data-name="user.sex">
+            <option value="">--请选择--</option>
+            <option value="male">男</option>
+            <option value="female">女</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>user.sex2:</td>
+        <td>
+          男<input name="user.sex2" data-name="user.sex2" type="radio" value="male" />
+          女<input name="user.sex2" data-name="user.sex2" type="radio" value="female" />
+        </td>
+      </tr>
+      <!-- 是否单身 -->
+      <tr>
+        <td>user.isSingle:</td>
+        <td><input data-name="user.isSingle" data-type="checkbox-boolean" type="checkbox" /></td>
+      </tr>
+      <!-- 兴趣 -->
+      <tr>
+        <td>user.hobby</td>
+        <td>
+          <select data-name="user.hobby" multiple="multiple">
+            <option value="football">足球</option>
+            <option value="basketball">篮球</option>
+            <option value="tennisball">羽毛球</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>user.hobby2</td>
+        <td>
+          足球<input data-name="user.hobby2" type="checkbox" value="football" />
+          篮球<input data-name="user.hobby2" type="checkbox" value="basketball" />
+          羽毛球<input data-name="user.hobby2" type="checkbox" value="tennisball" />
+        </td>
+      </tr>
+      <!-- 备注 -->
+      <tr>
+        <td>remark:</td>
+        <td><input data-name="remark" type="text" /></td>
+      </tr>
+    </table>
+    <button onclick="clearForm()">清空</button>
+  </div>
+  <!-- END 表单面板  -->
+
+  <!-- 结果面板  -->
+  <div id="resultPanel" class="panel">
+    <div class="panel-title">结果</div>
+    <!-- 结果 -->
+    <pre id="result"></pre>
+    <button onclick="clearResult()">清空</button>
+  </div>
+  <!-- END 结果面板  -->
+
+  <!-- 表达式面板 -->
+  <div id="expressionPanel" class="panel">
+    <div class="panel-title">表达式</div>
+    <!-- 表达式文本框 -->
+    <textarea id="expression"></textarea>
+    <!-- 表达式列表 -->
+    <select id="expressionList" multiple="multiple" onclick="selectExpression(this)">
+      <!-- 文本框user.name -->
+      <option value="model.setData('user.name', '小强')">
+        1、输入框user.name - 赋值“小强”
+      </option>
+      <option value="model.setData('user.name', '小红')">
+        1、输入框user.name - 赋值“小红”
+      </option>
+      <option value="model.getData('user.name')">
+        1、输入框user.name - 获取
+      </option>
+      <option value="model.setData('user.name', null)">
+        1、输入框user.name - 重置
+      </option>
+      <!-- END 文本框user.name -->
+
+      <!-- 下拉框框user.sex -->
+      <option value="model.setData('user.sex', 'female')">
+        2、下拉列表框user.sex - 选择“女”
+      </option>
+      <option value="model.setData('user.sex', 'male')">
+        2、下拉列表框user.sex - 选择“男”
+      </option>
+      <option value="model.getData('user.sex')">
+        2、下拉列表框user.sex - 获取
+      </option>
+      <option value="model.setData('user.sex', null)">
+        2、下拉列表框user.sex - 重置
+      </option>
+      <option value="model.setData('user.sex2', 'female')">
+        2、下拉列表框user.sex2 - 选择“女”
+      </option>
+      <option value="model.setData('user.sex2', 'male')">
+        2、下拉列表框user.sex2 - 选择“男”
+      </option>
+      <option value="model.getData('user.sex2')">
+        2、下拉列表框user.sex2 - 获取
+      </option>
+      <option value="model.setData('user.sex2', null)">
+        2、下拉列表框user.sex2 - 重置
+      </option>
+      <!-- END 下拉框框user.sex -->
+
+      <!-- 多选下拉框user.hobby -->
+      <option value="model.setData('user.hobby', ['football', 'tennisball'])">
+        3、多选列表框user.hobby - 选择“足球”和“羽毛球”
+      </option>
+      <option value="model.setData('user.hobby', ['basketball'])">
+        3、多选列表框user.hobby - 选择“篮球”
+      </option>
+      <option value="model.getData('user.hobby')">
+        3、多选列表框user.hobby - 获取
+      </option>
+      <option value="model.setData('user.hobby', null)">
+        3、多选列表框user.hobby - 重置
+      </option>
+      <option value="model.setData('user.hobby2', ['football', 'tennisball'])">
+        3、多选列表框user.hobby2 - 选择“足球”和“羽毛球”
+      </option>
+      <option value="model.setData('user.hobby2', ['basketball'])">
+        3、多选列表框user.hobby2 - 选择“篮球”
+      </option>
+      <option value="model.getData('user.hobby2')">
+        3、多选列表框user.hobby2 - 获取
+      </option>
+      <option value="model.setData('user.hobby2', null)">
+        3、多选列表框user.hobby2 - 重置
+      </option>
+      <!-- END 多选下拉框user.hobby -->
+
+      <!-- 复选框user.isSingle -->
+      <option value="model.setData('user.isSingle', true)">
+        4、复选框user.isSingle - 勾上
+      </option>
+      <option value="model.setData('user.isSingle', false)">
+        4、复选框user.isSingle - 不勾
+      </option>
+      <option value="model.getData('user.isSingle')">
+        4、复选框user.isSingle - 获取
+      </option>
+      <option value="model.setData('user.isSingle', null)">
+        4、复选框user.isSingle - 重置
+      </option>
+      <!-- END 复选框user.isSingle -->
+
+      <!-- 同时设置多个元素的值 -->
+      <option value="model.setData(['user.name', 'remark'], {})">
+        5、同时设置多个元素的值（不重置没有值的元素）
+      </option>
+      <option value="model.setData(['user.name', 'remark'], {}, true)">
+        5、同时设置多个元素的值（重置没有值的元素）
+      </option>
+      <!-- END 同时设置多个元素的值 -->
+
+      <!-- “user.”开头的元素的值 -->
+      <option value="model.setData('user.*', {'user.name': '小明', 'user.age': 12, 'user.sex': 'male'})">
+        6、设置“user.”开头的元素的值
+      </option>
+      <option value="model.setData('user.*', {'user.name': '小芳', 'user.age': 11, 'user.sex': 'female'})">
+        6、设置“user.”开头的元素的值
+      </option>
+      <option value="model.getData('user.*')">
+        6、获取“user.”开头的元素的值
+      </option>
+      <option value="model.setData('user.*', {}, true)">
+        6、重置“user.”开头的元素的值
+      </option>
+      <!-- END “user.”开头的元素的值 -->
+
+      <!-- 同时多个元素的值 -->
+      <option value="model.setData(['user.name', 'user.age'], {'user.name': '张三', 'user.age': 3})">
+        7、同时设置user.name和user.age
+      </option>
+      <option value="model.setData(['user.name', 'user.age'], {'user.name': '李四', 'user.age': 4})">
+        7、同时设置user.name和user.age
+      </option>
+      <option value="model.getData(['user.name', 'user.age'])">
+        7、同时获取user.name和user.age
+      </option>
+      <option value="model.setData(['user.name', 'user.age'], {}, true)">
+        7、同时置空user.name和user.age
+      </option>
+      <!-- END 同时多个元素的值 -->
+
+      <!-- 同時全部元素的值 -->
+      <option value="model.setData('*', {'user.name': '王五', 'user.age': 5, 'remark': '这是王五'})">
+        8、同時设置全部元素的值
+      </option>
+      <option value="model.setData('*', {'user.name': '赵六', 'user.age': 6, 'remark': '这是赵六'})">
+        8、同時设置全部元素的值
+      </option>
+      <option value="model.getData('*')">
+        8、同时获取全部元素的值
+      </option>
+      <option value="model.setData('*', {}, true)">
+        8、同时重置全部元素的值
+      </option>
+      <!-- END 同時全部元素的值  -->
+    </select>
+
+    <div id="controlBar">
+      <button onclick="clearExpression()">清空</button>
+      <button onclick="executeExpression()">执行</button>
+      <div id="controlBarRight">
+        <input id="executeWhenSelected" type="checkbox" checked="checked" />选中表达式立即执行
+      </div>
+    </div>
+  </div>
+  <!-- END 表达式面板  -->
+
+  <script src="../dist/ui-data.js"></script>
+  <script src="example.js"></script>
+</body>
+
+</html>
