@@ -8,7 +8,7 @@ module.exports = sourceCodeUtils;
  * @param {string} source 
  * @returns {number}
  */
-sourceCodeUtils.getStartSourceIndex = function (source) {
+sourceCodeUtils.getSourceStartIndex = function (source) {
   var index = source.search(/\/\*\*\s*SOURCE-CODE-START\s*\*\//);
 
   if (index < 0) {
@@ -26,7 +26,7 @@ sourceCodeUtils.getStartSourceIndex = function (source) {
  * @param {string} source 
  * @returns {number}
  */
-sourceCodeUtils.getEndSourceIndex = function (source) {
+sourceCodeUtils.getSourceEndIndex = function (source) {
   var index = source.search(/\/\*\*\s*SOURCE-CODE-END\s*\*\//);
 
   if (index < 0) {

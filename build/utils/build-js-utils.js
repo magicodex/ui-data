@@ -30,8 +30,8 @@ buildJsUtils.buildJs = function (grunt, taskName, destFileTemplate) {
     // 读取来源文件内容
     var content = grunt.file.read(sourceFilePath);
     // 计算源代码的开始和结束索引
-    var startIndex = sourceCodeUtils.getStartSourceIndex(content);
-    var endIndex = sourceCodeUtils.getEndSourceIndex(content);
+    var startIndex = sourceCodeUtils.getSourceStartIndex(content);
+    var endIndex = sourceCodeUtils.getSourceEndIndex(content);
 
     var newContent = content.substring(startIndex, endIndex);
     contents.push(newContent);
