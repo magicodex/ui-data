@@ -1,7 +1,7 @@
 
 "use strict";
 
-/** SOURCE-CODE-START */
+/* SOURCE-CODE-START */
 
 /**
  * @namespace utils
@@ -78,6 +78,6 @@ utils.unprefix = function (obj, prefix) {
   return newObj;
 };
 
-/** SOURCE-CODE-END */
+/* SOURCE-CODE-END */
 
 export { utils };

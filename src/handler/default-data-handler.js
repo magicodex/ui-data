@@ -3,7 +3,7 @@ import { utils } from '../utils';
 
 "use strict";
 
-/** SOURCE-CODE-START */
+/* SOURCE-CODE-START */
 
 /**
  * @namespace defaultDataHandler
@@ -235,6 +235,6 @@ defaultDataHandler.setSelectElementValue = function (element, value) {
   }
 };
 
-/** SOURCE-CODE-END */
+/* SOURCE-CODE-END */
 
 export { defaultDataHandler };

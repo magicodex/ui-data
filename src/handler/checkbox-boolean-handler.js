@@ -1,7 +1,7 @@
 
 "use strict";
 
-/** SOURCE-CODE-START */
+/* SOURCE-CODE-START */
 
 /**
  * @namespace checkboxBooleanHandler
@@ -33,6 +33,6 @@ checkboxBooleanHandler.setValue = function (elements, value, defaultNull) {
   element.checked = value;
 };
 
-/** SOURCE-CODE-END */
+/* SOURCE-CODE-END */
 
 export { checkboxBooleanHandler };

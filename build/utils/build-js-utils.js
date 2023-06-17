@@ -6,8 +6,8 @@ var buildJsUtils = {};
 module.exports = buildJsUtils;
 
 //
-// 先截取 "/** SOURCE-CODE-START */" 与
-// "/** SOURCE-CODE-END */" 这两个字符串之间的内容，
+// 先截取 "/* SOURCE-CODE-START */" 与
+// "/* SOURCE-CODE-END */" 这两个字符串之间的内容，
 // 然后把截取的内容拼起来输出到目标文件中。
 //
 

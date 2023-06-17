@@ -6,7 +6,7 @@ import { Model } from './model';
 
 "use strict";
 
-/** SOURCE-CODE-START */
+/* SOURCE-CODE-START */
 
 var uiData = {
   Model: Model,
@@ -21,6 +21,6 @@ uiData.model = function (baseElement, opts) {
   return new Model(baseElement, opts);
 };
 
-/** SOURCE-CODE-END */
+/* SOURCE-CODE-END */
 
 export { uiData };

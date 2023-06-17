@@ -6,7 +6,7 @@ import { defaultDataHandler } from './handler/default-data-handler';
 
 "use strict";
 
-/** SOURCE-CODE-START */
+/* SOURCE-CODE-START */
 
 /**
  * @class
@@ -326,6 +326,6 @@ Model.prototype.groupElementsByName = function (elements) {
 };
 
 
-/** SOURCE-CODE-END */
+/* SOURCE-CODE-END */
 
 export { Model };
