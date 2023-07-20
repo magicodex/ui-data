@@ -12,7 +12,8 @@ module.exports = function (grunt) {
         'src/model.js',
         'src/ui-data.js'
       ],
-      dest: 'dist/ui-data.js'
+      dest: 'dist/ui-data.js',
+      minDest: 'dist/ui-data.min.js'
     },
     cjs: {
       src: [

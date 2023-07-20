@@ -17,9 +17,9 @@
     "build": "grunt",
     "test": "grunt && start ./test/index.html"
   },
-  "dependencies": {},
   "devDependencies": {
-    "grunt": "^1.6.1"
+    "grunt": "^1.6.1",
+    "uglify-js": "^3.17.4"
   },
   "repository": {
     "type": "git",

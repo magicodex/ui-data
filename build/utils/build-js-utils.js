@@ -1,6 +1,7 @@
 "use strict";
 
 var sourceCodeUtils = require('./source-code-utils');
+var minify = require('uglify-js').minify;
 
 var buildJsUtils = {};
 module.exports = buildJsUtils;
@@ -15,6 +16,7 @@ buildJsUtils.buildJs = function (grunt, taskName, destFileTemplate) {
   // 获取来源文件路径和目标文件路径
   var sourceFilePaths = grunt.config(taskName + '.src');
   var destFilePath = grunt.config(taskName + '.dest');
+  var minDestFilePath = grunt.config(taskName + '.minDest');
   var pkgVersion = grunt.config('pkg.version');
 
   var contents = [];
@@ -44,4 +46,12 @@ buildJsUtils.buildJs = function (grunt, taskName, destFileTemplate) {
   // 输出到目标文件
   grunt.file.write(destFilePath, destFileContent);
   grunt.log.write('File ' + destFilePath + ' created.');
+
+  if (minDestFilePath) {
+    var minifyResult = minify(destFileContent);
+    var minDestFileContent = minifyResult.code;
+    // 输出到目标文件
+    grunt.file.write(minDestFilePath, minDestFileContent);
+    grunt.log.write('\nFile ' + minDestFilePath + ' created.');
+  }
 };
