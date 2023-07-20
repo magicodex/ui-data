@@ -24,10 +24,18 @@ module.exports = function (grunt) {
         'src/ui-data.js'
       ],
       dest: 'cjs/ui-data.js'
+    },
+    mock: {
+      src: [
+        'src/utils.js',
+        'src/mock/model.mock.js',
+        'src/mock/ui-data.mock.js'
+      ],
+      dest: 'dist/ui-data.mock.js'
     }
   });
 
   grunt.loadTasks('build/tasks');
 
-  grunt.registerTask('default', ['dist', 'cjs']);
+  grunt.registerTask('default', ['dist', 'cjs', 'mock']);
 };
