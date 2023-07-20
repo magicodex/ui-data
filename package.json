@@ -15,7 +15,8 @@
   ],
   "scripts": {
     "build": "grunt",
-    "test": "grunt && start ./test/index.html"
+    "test": "grunt && start ./test/index.html",
+    "test-mock": "grunt && start ./test/test-mock.html"
   },
   "devDependencies": {
     "grunt": "^1.6.1",

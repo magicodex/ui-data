@@ -51,16 +51,17 @@ Model.prototype.getData = function (expression, skipNull) {
   }
 
   skipNull = (skipNull || false);
+  var data = this._data;
   var result;
 
   // 若表达式是数组或者"*"结尾的字符串，则是获取多个元素的值
   if ((expression instanceof Array)
     || (expression.charAt(expression.length - 1) === '*')) {
     result = {};
-    var itemNames = getItemNames(this._data, expression);
+    var itemNames = getItemNames(data, expression);
 
     itemNames.forEach(function (itemName) {
-      var itemValue = this._data[itemName];
+      var itemValue = data[itemName];
 
       if (!utils.isNullOrUndefined(itemValue) || !skipNull) {
         result[itemName] = itemValue;
@@ -68,7 +69,7 @@ Model.prototype.getData = function (expression, skipNull) {
     });
   } else {
     var itemName = expression;
-    result = this._data[itemName];
+    result = data[itemName];
   }
 
   return result;
@@ -87,28 +88,29 @@ Model.prototype.setData = function (expression, value, defaultNull) {
   }
 
   defaultNull = (defaultNull || false);
+  var data = this._data;
 
   // 若表达式是数组或者"*"结尾的字符串，则是获取多个元素的值
   if ((expression instanceof Array)
     || (expression.charAt(expression.length - 1) === '*')) {
     value = (value || {});
-    var itemNames = getItemNames(this._data, expression);
+    var itemNames = getItemNames(data, expression);
 
     itemNames.forEach(function (itemName) {
       var itemValue = value[itemName];
 
       if (!utils.isNullOrUndefined(itemVaue) || defaultNull) {
-        this._data[itemName] = itemValue;
+        data[itemName] = itemValue;
       }
     });
 
     for (var itemName in value) {
       var itemValue = value[itemName];
-      this._data[itemName] = itemValue;
+      data[itemName] = itemValue;
     }
   } else {
     var itemName = expression;
-    this._data[itemName] = itemValue;
+    data[itemName] = value;
   }
 };
 
