@@ -248,4 +248,5 @@ uiData.model = function (baseElement, opts) {
 
 
 global[namespace] = uiData;
-})(window, '$uiData');
+global['$uiData'] = uiData;
+})(window, 'uiData');

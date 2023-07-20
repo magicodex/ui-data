@@ -15,7 +15,8 @@ const DEST_FILE_TEMPLATE = `
 {{source}}
 
 global[namespace] = uiData;
-})(window, '$uiData');
+global['$uiData'] = uiData;
+})(window, 'uiData');
 `;
 
 module.exports = function (grunt) {
