@@ -1,6 +1,6 @@
 
 import { utils } from '../utils';
-import { Model } from './model.mock';
+import { Model } from './model-mock';
 
 "use strict";
 

@@ -28,8 +28,8 @@ module.exports = function (grunt) {
     mock: {
       src: [
         'src/utils.js',
-        'src/mock/model.mock.js',
-        'src/mock/ui-data.mock.js'
+        'src/mock/model-mock.js',
+        'src/mock/ui-data-mock.js'
       ],
       dest: 'dist/ui-data.mock.js'
     }
