@@ -1,5 +1,5 @@
 
-QUnit.module('Model', function () {
+QUnit.module('model-mock', function () {
   var Model = $uiData.Model;
 
   QUnit.test('test', function (assert) {

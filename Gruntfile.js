@@ -31,7 +31,8 @@ module.exports = function (grunt) {
         'src/mock/model-mock.js',
         'src/mock/ui-data-mock.js'
       ],
-      dest: 'dist/ui-data.mock.js'
+      dest: 'dist/ui-data-mock.js',
+      minDest: 'dist/ui-data-mock.min.js'
     }
   });
 
