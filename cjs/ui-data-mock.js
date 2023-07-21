@@ -6,8 +6,6 @@
  * Licensed under MIT (https://github.com/magicodex/ui-data/blob/main/LICENSE)
  */
 
-(function(global, namespace) {
-
 
 
 /**
@@ -247,6 +245,4 @@ uiData.model = function (baseElement, opts) {
 
 
 
-global[namespace] = uiData;
-global['$uiData'] = uiData;
-})(window, 'uiData');
+module.exports = uiData;

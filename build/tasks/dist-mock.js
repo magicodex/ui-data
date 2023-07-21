@@ -6,7 +6,7 @@ const DEST_FILE_TEMPLATE = `
 "use strict";
 
 /*!
- * ui-data.mock.js {{version}} (https://github.com/magicodex/ui-data)
+ * ui-data {{version}} (https://github.com/magicodex/ui-data)
  * Licensed under MIT (https://github.com/magicodex/ui-data/blob/main/LICENSE)
  */
 
@@ -21,8 +21,8 @@ global['$uiData'] = uiData;
 
 module.exports = function (grunt) {
 
-  grunt.registerTask('mock', function () {
-    buildJsUtils.buildJs(grunt, 'mock', DEST_FILE_TEMPLATE);
+  grunt.registerTask('dist-mock', function () {
+    buildJsUtils.buildJs(grunt, 'dist-mock', DEST_FILE_TEMPLATE);
   });
 
 };
