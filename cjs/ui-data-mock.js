@@ -2,7 +2,7 @@
 "use strict";
 
 /*!
- * ui-data v1.3.2 (https://github.com/magicodex/ui-data)
+ * ui-data v1.3.4 (https://github.com/magicodex/ui-data)
  * Licensed under MIT (https://github.com/magicodex/ui-data/blob/main/LICENSE)
  */
 
@@ -120,16 +120,15 @@ Model.prototype.groupElementsByName = unimplementedFunction;
 /**
  * @description 获取指定表达式对应元素的数据
  * @param {(string|string[])} expression 表达式
- * @param {boolean} [skipNull] 是否跳过 null 值
+ * @param {function} [skipFn] 判断是否跳过值,比如 (targetValue) => (targetValue == null)
  * @returns {*} 值
  */
-Model.prototype.getData = function (expression, skipNull) {
+Model.prototype.getData = function (expression, skipFn) {
   // 表达式只能是字符串或数组
   if ((typeof expression !== 'string') && !(expression instanceof Array)) {
     throw new Error('argument#0 "expression" required string or Array');
   }
 
-  skipNull = (skipNull || false);
   var data = this._data;
   var result;
 
@@ -142,7 +141,7 @@ Model.prototype.getData = function (expression, skipNull) {
     itemNames.forEach(function (itemName) {
       var itemValue = data[itemName];
 
-      if (!utils.isNullOrUndefined(itemValue) || !skipNull) {
+      if (utils.isNullOrUndefined(skipFn) || !skipFn(itemValue)) {
         result[itemName] = itemValue;
       }
     });
@@ -158,15 +157,15 @@ Model.prototype.getData = function (expression, skipNull) {
  * @description 设置指定表达式对应元素的数据
  * @param {string|string[]} expression 表达式
  * @param {*} value 值
- * @param {boolean} [defaultNull] 是否默认 null 值
+ * @param {boolean} [notSkipSetIfValueAbsent=false] 是否跳过没有指定值的元素,默认 false 跳过没有指定值的元素
  */
-Model.prototype.setData = function (expression, value, defaultNull) {
+Model.prototype.setData = function (expression, value, notSkipSetIfValueAbsent) {
   // 表达式只能是字符串或数组
   if ((typeof expression !== 'string') && !(expression instanceof Array)) {
     throw new Error('argument#0 "expression" required string or Array');
   }
 
-  defaultNull = (defaultNull || false);
+  notSkipSetIfValueAbsent = (notSkipSetIfValueAbsent === true);
   var data = this._data;
 
   // 若表达式是数组或者"*"结尾的字符串，则是获取多个元素的值
@@ -178,7 +177,7 @@ Model.prototype.setData = function (expression, value, defaultNull) {
     itemNames.forEach(function (itemName) {
       var itemValue = value[itemName];
 
-      if (!utils.isNullOrUndefined(itemVaue) || defaultNull) {
+      if ((itemName in value) || notSkipSetIfValueAbsent) {
         data[itemName] = itemValue;
       }
     });

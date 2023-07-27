@@ -2,7 +2,7 @@
 "use strict";
 
 /*!
- * ui-data v1.3.2 (https://github.com/magicodex/ui-data)
+ * ui-data v1.3.4 (https://github.com/magicodex/ui-data)
  * Licensed under MIT (https://github.com/magicodex/ui-data/blob/main/LICENSE)
  */
 
