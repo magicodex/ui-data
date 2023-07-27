@@ -14,10 +14,10 @@ var defaultDataHandler = {};
 /**
  * @memberof defaultDataHandler
  * @param {Element[]} elements DOM元素
- * @param {boolean} skipNull 是否跳过 null 值
+ * @param {function} [skipFn] 判断是否跳过值
  * @returns {*}
  */
-defaultDataHandler.getValue = function (elements, skipNull) {
+defaultDataHandler.getValue = function (elements, skipFn) {
   if (!(elements instanceof Array)) {
     throw new Error('argument#0 "elements required Array');
   }
@@ -50,9 +50,9 @@ defaultDataHandler.getValue = function (elements, skipNull) {
  * @memberof defaultDataHandler
  * @param {Element[]} elements DOM元素
  * @param {*} value 值
- * @param {boolean} defaultNull 是否默认 null 值
+ * @param {boolean} [notSkipSetIfValueAbsent=false] 是否跳过没有指定值的元素
  */
-defaultDataHandler.setValue = function (elements, value, defaultNull) {
+defaultDataHandler.setValue = function (elements, value, notSkipSetIfValueAbsent) {
   if (!(elements instanceof Array)) {
     throw new Error('argument#0 "elements required Array');
   }

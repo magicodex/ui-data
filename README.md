@@ -45,6 +45,30 @@ model.setData(['user.name', 'user.password'], {
 // 获取变量名是 "user.name"、"user.password" 的元素的值
 var data = model.getData(['user.name', 'user.password']);
 ==> {"user.userName":"张三","user.password":"123456"}
+
+// 修改变量名前缀是 "user." 的元素的值
+model.setData('user.*', {
+  'user.name': '张三',
+  'user.password': '123456'
+});
+
+// 获取变量名前缀是 "user." 的元素的值
+var data = model.getData('user.*');
+==> {"user.userName":"张三","user.password":"123456"}
+
+//
+// 获取/修改全部元素的值
+//
+
+// 修改全部元素的值
+model.setData('*', {
+  'user.name': '张三',
+  'user.password': '123456'
+});
+
+// 获取全部元素的值
+var data = model.getData('*');
+==> {"user.userName":"张三","user.password":"123456"}
 ```
 
 ## 开源协议

@@ -12,10 +12,10 @@ var checkboxBooleanHandler = {};
 /**
  * @memberof checkboxBooleanHandler
  * @param {Element[]} elements DOM元素
- * @param {boolean} skipNull 是否跳过 null 值
+ * @param {function} [skipFn] 判断是否跳过值
  * @returns {*}
  */
-checkboxBooleanHandler.getValue = function (elements, skipNull) {
+checkboxBooleanHandler.getValue = function (elements, skipFn) {
   var element = elements[0];
 
   return element.checked;
@@ -25,9 +25,9 @@ checkboxBooleanHandler.getValue = function (elements, skipNull) {
  * @memberof checkboxBooleanHandler
  * @param {Element[]} elements DOM元素
  * @param {*} value 值
- * @param {boolean} defaultNull 是否默认 null 值
+ * @@param {boolean} [notSkipSetIfValueAbsent=false] 是否跳过没有指定值的元素
  */
-checkboxBooleanHandler.setValue = function (elements, value, defaultNull) {
+checkboxBooleanHandler.setValue = function (elements, value, notSkipSetIfValueAbsent) {
   var element = elements[0];
 
   element.checked = value;
