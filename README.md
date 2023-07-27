@@ -94,14 +94,14 @@ function setData(expression, value, notSkipSetIfValueAbsent);
 
 提供工具类方法用于添加/移除属性名称的指定前缀
 ```
-$uiData.utils.prefix(obj, prefix) 给对象的所有属性添加指定的前缀，比如：
+1. $uiData.utils.prefix(obj, prefix) 给对象的所有属性添加指定的前缀，比如：
 $uiData.utils.prefix({
   name: '张三',
   password: '123456'
 }, 'user.');
 ==> {"user.name":"张三", "user.password": "123456"}
 
-$uiData.utils.unprefix(obj, prefix) 给对象的所有指定前缀的属性移除指定前缀，比如：
+2. $uiData.utils.unprefix(obj, prefix) 给对象的所有指定前缀的属性移除指定前缀，比如：
 $uiData.utils.unprefix({
   'user.name': '张三',
   'user.password': '123456'
