@@ -2,7 +2,7 @@
 "use strict";
 
 /*!
- * ui-data v1.3.1 (https://github.com/magicodex/ui-data)
+ * ui-data v1.3.2 (https://github.com/magicodex/ui-data)
  * Licensed under MIT (https://github.com/magicodex/ui-data/blob/main/LICENSE)
  */
 
@@ -94,10 +94,10 @@ var defaultDataHandler = {};
 /**
  * @memberof defaultDataHandler
  * @param {Element[]} elements DOM元素
- * @param {boolean} skipNull 是否跳过 null 值
+ * @param {function} [skipFn] 判断是否跳过值
  * @returns {*}
  */
-defaultDataHandler.getValue = function (elements, skipNull) {
+defaultDataHandler.getValue = function (elements, skipFn) {
   if (!(elements instanceof Array)) {
     throw new Error('argument#0 "elements required Array');
   }
@@ -130,9 +130,9 @@ defaultDataHandler.getValue = function (elements, skipNull) {
  * @memberof defaultDataHandler
  * @param {Element[]} elements DOM元素
  * @param {*} value 值
- * @param {boolean} defaultNull 是否默认 null 值
+ * @param {boolean} [notSkipSetIfValueAbsent=false] 是否跳过没有指定值的元素
  */
-defaultDataHandler.setValue = function (elements, value, defaultNull) {
+defaultDataHandler.setValue = function (elements, value, notSkipSetIfValueAbsent) {
   if (!(elements instanceof Array)) {
     throw new Error('argument#0 "elements required Array');
   }
@@ -326,10 +326,10 @@ var checkboxBooleanHandler = {};
 /**
  * @memberof checkboxBooleanHandler
  * @param {Element[]} elements DOM元素
- * @param {boolean} skipNull 是否跳过 null 值
+ * @param {function} [skipFn] 判断是否跳过值
  * @returns {*}
  */
-checkboxBooleanHandler.getValue = function (elements, skipNull) {
+checkboxBooleanHandler.getValue = function (elements, skipFn) {
   var element = elements[0];
 
   return element.checked;
@@ -339,9 +339,9 @@ checkboxBooleanHandler.getValue = function (elements, skipNull) {
  * @memberof checkboxBooleanHandler
  * @param {Element[]} elements DOM元素
  * @param {*} value 值
- * @param {boolean} defaultNull 是否默认 null 值
+ * @@param {boolean} [notSkipSetIfValueAbsent=false] 是否跳过没有指定值的元素
  */
-checkboxBooleanHandler.setValue = function (elements, value, defaultNull) {
+checkboxBooleanHandler.setValue = function (elements, value, notSkipSetIfValueAbsent) {
   var element = elements[0];
 
   element.checked = value;
@@ -386,16 +386,15 @@ Model.prototype.getBaseElement = function () {
 /**
  * @description 获取指定表达式对应元素的数据
  * @param {(string|string[])} expression 表达式
- * @param {boolean} [skipNull] 是否跳过 null 值
+ * @param {function} [skipFn] 判断是否跳过值
  * @returns {*} 值
  */
-Model.prototype.getData = function (expression, skipNull) {
+Model.prototype.getData = function (expression, skipFn) {
   // 表达式只能是字符串或数组
   if ((typeof expression !== 'string') && !(expression instanceof Array)) {
     throw new Error('argument#0 "expression" required string or Array');
   }
 
-  skipNull = (skipNull || false);
   // 转换表达式成选择器
   var selector = this.convertExpressionToSelector(expression);
   // 查找指定选择器对应的元素
@@ -415,9 +414,9 @@ Model.prototype.getData = function (expression, skipNull) {
 
       var elementArray = elementArrays[dataName];
       // 获取元素的值
-      var dataValue = this.doGetDataValue(elementArray, skipNull);
+      var dataValue = this.doGetDataValue(elementArray, skipFn);
 
-      if (!utils.isNullOrUndefined(dataValue) || !skipNull) {
+      if (utils.isNullOrUndefined(skipFn) || !skipFn(dataValue)) {
         elementValues[dataName] = dataValue;
       }
     }
@@ -435,7 +434,7 @@ Model.prototype.getData = function (expression, skipNull) {
 
       var elementArray = elementArrays[dataName];
       // 获取元素的值
-      return this.doGetDataValue(elementArray, skipNull);
+      return this.doGetDataValue(elementArray, skipFn);
     }
   }
 };
@@ -444,15 +443,15 @@ Model.prototype.getData = function (expression, skipNull) {
  * @description 设置指定表达式对应元素的数据
  * @param {string|string[]} expression 表达式
  * @param {*} value 值
- * @param {boolean} [defaultNull] 是否默认 null 值
+ * @param {boolean} [notSkipSetIfValueAbsent=false] 是否跳过没有指定值的元素
  */
-Model.prototype.setData = function (expression, value, defaultNull) {
+Model.prototype.setData = function (expression, value, notSkipSetIfValueAbsent) {
   // 表达式只能是字符串或数组
   if ((typeof expression !== 'string') && !(expression instanceof Array)) {
     throw new Error('argument#0 "expression" required string or Array');
   }
 
-  defaultNull = (defaultNull || false);
+  notSkipSetIfValueAbsent = (notSkipSetIfValueAbsent === true);
   // 转换表达式成选择器
   var selector = this.convertExpressionToSelector(expression);
   // 查找指定选择器对应的元素
@@ -469,9 +468,9 @@ Model.prototype.setData = function (expression, value, defaultNull) {
       var elementArray = elementArrays[dataName];
       var dataValue = value[dataName];
 
-      if (!utils.isNullOrUndefined(dataValue) || defaultNull) {
+      if ((dataName in value) || notSkipSetIfValueAbsent) {
         // 设置元素的值
-        this.doSetDataValue(elementArray, dataValue, defaultNull);
+        this.doSetDataValue(elementArray, dataValue, notSkipSetIfValueAbsent);
       }
     }
   } else {
@@ -483,7 +482,7 @@ Model.prototype.setData = function (expression, value, defaultNull) {
       var elementArray = elementArrays[dataName];
 
       // 设置元素的值
-      this.doSetDataValue(elementArray, value, defaultNull);
+      this.doSetDataValue(elementArray, value, notSkipSetIfValueAbsent);
     }
   }
 };
@@ -491,10 +490,10 @@ Model.prototype.setData = function (expression, value, defaultNull) {
 /**
  * @description 获取元素的值
  * @param {Element[]} elements DOM元素
- * @param {boolean} [skipNull] 是否跳过 null 值
+ * @param {function} [skipFn] 判断是否跳过值
  * @returns {*} 值
  */
-Model.prototype.doGetDataValue = function (elements, skipNull) {
+Model.prototype.doGetDataValue = function (elements, skipFn) {
   if (!(elements instanceof Array)) {
     throw new Error('argument#0 "elements required Array');
   }
@@ -506,16 +505,16 @@ Model.prototype.doGetDataValue = function (elements, skipNull) {
   // 获取组件处理器
   var handler = this.getDataHandlerByElement(elements[0]);
   // 获取元素的值
-  return handler.getValue(elements, (skipNull || false));
+  return handler.getValue(elements, skipFn);
 };
 
 /**
  * @description 设置元素的值
  * @param {Element[]} elements DOM元素
  * @param {*} value 值
- * @param {boolean} [defaultNull] 是否默认 null 值
+ * @param {boolean} [notSkipSetIfValueAbsent] 是否默认 null 值
  */
-Model.prototype.doSetDataValue = function (elements, value, defaultNull) {
+Model.prototype.doSetDataValue = function (elements, value, notSkipSetIfValueAbsent) {
   if (!(elements instanceof Array)) {
     throw new Error('argument#0 "elements required Array');
   }
@@ -527,7 +526,7 @@ Model.prototype.doSetDataValue = function (elements, value, defaultNull) {
   // 获取组件处理器
   var handler = this.getDataHandlerByElement(elements[0]);
   // 设置元素的值
-  handler.setValue(elements, value, (defaultNull || false));
+  handler.setValue(elements, value, (notSkipSetIfValueAbsent === true));
 };
 
 /**
