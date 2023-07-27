@@ -386,7 +386,7 @@ Model.prototype.getBaseElement = function () {
 /**
  * @description 获取指定表达式对应元素的数据
  * @param {(string|string[])} expression 表达式
- * @param {function} [skipFn] 判断是否跳过值
+ * @param {function} [skipFn] 判断是否跳过值,比如 (targetValue) => (targetValue == null)
  * @returns {*} 值
  */
 Model.prototype.getData = function (expression, skipFn) {
@@ -443,7 +443,7 @@ Model.prototype.getData = function (expression, skipFn) {
  * @description 设置指定表达式对应元素的数据
  * @param {string|string[]} expression 表达式
  * @param {*} value 值
- * @param {boolean} [notSkipSetIfValueAbsent=false] 是否跳过没有指定值的元素
+ * @param {boolean} [notSkipSetIfValueAbsent=false] 是否跳过没有指定值的元素,默认 false 跳过没有指定值的元素
  */
 Model.prototype.setData = function (expression, value, notSkipSetIfValueAbsent) {
   // 表达式只能是字符串或数组
