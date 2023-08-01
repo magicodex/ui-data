@@ -12,6 +12,10 @@ const DEST_FILE_TEMPLATE = `
 
 (function(global, namespace) {
 
+if (global['$uiData'] != null) {
+  return;
+}
+
 {{source}}
 
 global[namespace] = uiData;

@@ -2,11 +2,15 @@
 "use strict";
 
 /*!
- * ui-data v1.3.4 (https://github.com/magicodex/ui-data)
+ * ui-data v1.3.5 (https://github.com/magicodex/ui-data)
  * Licensed under MIT (https://github.com/magicodex/ui-data/blob/main/LICENSE)
  */
 
 (function(global, namespace) {
+
+if (global['$uiData'] != null) {
+  return;
+}
 
 
 
