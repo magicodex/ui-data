@@ -14,11 +14,10 @@ var uiData = {
   dataHandlers: {
     checkboxBooleanHandler: checkboxBooleanHandler,
     defaultDataHandler: defaultDataHandler
+  },
+  model: function (baseElement, opts) {
+    return new Model(baseElement, opts);
   }
-};
-
-uiData.model = function (baseElement, opts) {
-  return new Model(baseElement, opts);
 };
 
 /* SOURCE-CODE-END */
