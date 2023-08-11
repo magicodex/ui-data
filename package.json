@@ -12,7 +12,8 @@
   "files": [
     "dist/",
     "cjs/",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "scripts": {
     "build": "grunt",
