@@ -18,8 +18,8 @@ if (global['$uiData'] != null) {
 
 {{source}}
 
-global[namespace] = uiData;
-global['$uiData'] = uiData;
+global[namespace] = mockUiData;
+global['$uiData'] = mockUiData;
 })(window, 'uiData');
 `;
 

@@ -12,7 +12,7 @@ const DEST_FILE_TEMPLATE = `
 
 {{source}}
 
-module.exports = uiData;
+module.exports = mockUiData;
 `;
 
 module.exports = function (grunt) {

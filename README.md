@@ -1,5 +1,10 @@
 # ui-data
 
+## 安装依赖
+```
+npm install ui-data
+```
+
 ## 添加依赖
 
 ui-data 没依赖第三方库，只要在 HTML 的 &lt;script&gt; 标签中引用它:
@@ -19,7 +24,7 @@ ui-data 没依赖第三方库，只要在 HTML 的 &lt;script&gt; 标签中引�
 *标签中的 data-name 属性相当于变量名，是获取/修改元素的值的标识符。*
 
 ```
-var model = $uiData.model(document);
+var model = uiData.model(document);
 
 //
 // 获取/修改指定的单个元素的值
@@ -94,15 +99,15 @@ function setData(expression, value, notSkipSetIfValueAbsent);
 
 提供工具类方法用于添加/移除属性名称的指定前缀
 ```
-1. $uiData.utils.prefix(obj, prefix) 给对象的所有属性添加指定的前缀，比如：
-$uiData.utils.prefix({
+1. uiData.utils.prefix(obj, prefix) 给对象的所有属性添加指定的前缀，比如：
+uiData.utils.prefix({
   name: '张三',
   password: '123456'
 }, 'user.');
 ==> {"user.name":"张三", "user.password": "123456"}
 
-2. $uiData.utils.unprefix(obj, prefix) 给对象的所有指定前缀的属性移除指定前缀，比如：
-$uiData.utils.unprefix({
+2. uiData.utils.unprefix(obj, prefix) 给对象的所有指定前缀的属性移除指定前缀，比如：
+uiData.utils.unprefix({
   'user.name': '张三',
   'user.password': '123456'
 }, 'user.');

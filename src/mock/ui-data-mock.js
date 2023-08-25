@@ -1,21 +1,21 @@
 
 import { utils } from '../utils';
-import { Model } from './model-mock';
+import { MockModel } from './model-mock';
 
 "use strict";
 
 /* SOURCE-CODE-START */
 
-var uiData = {
-  Model: Model,
+var mockUiData = {
+  Model: MockModel,
   utils: utils,
   dataHandlers: {}
 };
 
-uiData.model = function (baseElement, opts) {
-  return new Model(baseElement, opts);
+mockUiData.model = function (baseElement, opts) {
+  return new MockModel(baseElement, opts);
 };
 
 /* SOURCE-CODE-END */
 
-export { uiData };
+export { mockUiData };

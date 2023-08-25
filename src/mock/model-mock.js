@@ -11,17 +11,17 @@ import { utils } from '../utils';
  * @param {(Document|Element)} baseElement
  * @param {object} [opts]
  */
-function Model(baseElement, opts) {
+function MockModel(baseElement, opts) {
   this._data = {};
 }
 
-Model.config = {
+MockModel.config = {
   defaultNameAttributeName: 'data-name',
   defaultTypeAttributeName: 'data-type',
   initDataHandlers: {}
 };
 
-Model._privateFn = {
+MockModel._privateFn = {
   getItemNames: getItemNames
 };
 
@@ -29,13 +29,13 @@ function unimplementedFunction() {
   throw new Error('unimplemented function');
 }
 
-Model.prototype.getBaseElement = unimplementedFunction;
-Model.prototype.doGetDataValue = unimplementedFunction;
-Model.prototype.doSetDataValue = unimplementedFunction;
-Model.prototype.getDataHandlerByElement = unimplementedFunction;
-Model.prototype.queryElementsBySelector = unimplementedFunction;
-Model.prototype.convertExpressionToSelector = unimplementedFunction;
-Model.prototype.groupElementsByName = unimplementedFunction;
+MockModel.prototype.getBaseElement = unimplementedFunction;
+MockModel.prototype.doGetDataValue = unimplementedFunction;
+MockModel.prototype.doSetDataValue = unimplementedFunction;
+MockModel.prototype.getDataHandlerByElement = unimplementedFunction;
+MockModel.prototype.queryElementsBySelector = unimplementedFunction;
+MockModel.prototype.convertExpressionToSelector = unimplementedFunction;
+MockModel.prototype.groupElementsByName = unimplementedFunction;
 
 
 /**
@@ -44,7 +44,7 @@ Model.prototype.groupElementsByName = unimplementedFunction;
  * @param {function} [skipFn] 判断是否跳过值,比如 (targetValue) => (targetValue == null)
  * @returns {*} 值
  */
-Model.prototype.getData = function (expression, skipFn) {
+MockModel.prototype.getData = function (expression, skipFn) {
   // 表达式只能是字符串或数组
   if ((typeof expression !== 'string') && !(expression instanceof Array)) {
     throw new Error('argument#0 "expression" required string or Array');
@@ -80,7 +80,7 @@ Model.prototype.getData = function (expression, skipFn) {
  * @param {*} value 值
  * @param {boolean} [notSkipSetIfValueAbsent=false] 是否跳过没有指定值的元素,默认 false 跳过没有指定值的元素
  */
-Model.prototype.setData = function (expression, value, notSkipSetIfValueAbsent) {
+MockModel.prototype.setData = function (expression, value, notSkipSetIfValueAbsent) {
   // 表达式只能是字符串或数组
   if ((typeof expression !== 'string') && !(expression instanceof Array)) {
     throw new Error('argument#0 "expression" required string or Array');
@@ -114,6 +114,7 @@ Model.prototype.setData = function (expression, value, notSkipSetIfValueAbsent) 
 };
 
 /**
+ * @memberof MockModel
  * @description 返回名称列表
  * @param {Object} data
  * @param {*} expression 
@@ -153,4 +154,4 @@ function getItemNames(data, expression) {
 
 /* SOURCE-CODE-END */
 
-export { Model };
+export { MockModel };
