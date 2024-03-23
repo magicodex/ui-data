@@ -2,6 +2,25 @@
 QUnit.module('defaultDataHandler', function () {
   var handler = $uiData.dataHandlers.defaultDataHandler;
 
+  QUnit.test('getValue', function (assert) {
+    var jqBaseElement = $('#qunit-fixture');
+    var jqElement1 = $('<span data-name="content">hello</span>');
+    jqElement1.appendTo(jqBaseElement);
+
+    var actual = handler.getValue([jqElement1[0]]);
+    assert.strictEqual(actual, 'hello');
+  });
+
+  QUnit.test('setValue', function (assert) {
+    var jqBaseElement = $('#qunit-fixture');
+    var jqElement1 = $('<span data-name="content"></span>');
+    jqElement1.appendTo(jqBaseElement);
+
+    handler.setValue([jqElement1[0]], 'hello');
+    var actual = jqElement1.html();
+    assert.strictEqual(actual, 'hello');
+  });
+
   QUnit.test('getInputElementValue', function (assert) {
     var jqBaseElement = $('#qunit-fixture');
     var jqElement1 = $('<input name="user.sex" data-name="user.sex" type="radio" value="male"/>');

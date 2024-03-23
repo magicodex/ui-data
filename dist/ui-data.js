@@ -2,7 +2,7 @@
 "use strict";
 
 /*!
- * ui-data v1.3.7 (https://github.com/magicodex/ui-data)
+ * ui-data v1.3.8 (https://github.com/magicodex/ui-data)
  * Licensed under MIT (https://github.com/magicodex/ui-data/blob/main/LICENSE)
  */
 
@@ -126,7 +126,7 @@ defaultDataHandler.getValue = function (elements, skipFn) {
     // 选择框标签
     value = this.getSelectElementValue(element);
   } else {
-    value = element.innerHtml;
+    value = element.innerHTML;
   }
 
   return value;
@@ -164,7 +164,7 @@ defaultDataHandler.setValue = function (elements, value, notSkipSetIfValueAbsent
     // 选择框标签
     this.setSelectElementValue(element, value);
   } else {
-    element.innerHtml = value;
+    element.innerHTML = value;
   }
 };
 

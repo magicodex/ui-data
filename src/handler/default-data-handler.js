@@ -40,7 +40,7 @@ defaultDataHandler.getValue = function (elements, skipFn) {
     // 选择框标签
     value = this.getSelectElementValue(element);
   } else {
-    value = element.innerHtml;
+    value = element.innerHTML;
   }
 
   return value;
@@ -78,7 +78,7 @@ defaultDataHandler.setValue = function (elements, value, notSkipSetIfValueAbsent
     // 选择框标签
     this.setSelectElementValue(element, value);
   } else {
-    element.innerHtml = value;
+    element.innerHTML = value;
   }
 };
 
